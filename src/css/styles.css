@@ -1,12 +1,5 @@
-/**
-  |============================
-  | include css partials with
-  | default @import url()
-  |============================
-*/
+
 @import url('./reset.css');
-@import url('./vite-promo.css');
-@import url('./header.css');
 
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -22,4 +15,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+.gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 156px;
+  gap: 24px;
+  list-style: none;
+}
+
+.gallery-item {
+  width: calc((100% - 24px*2) /3);
+}
+
+.gallery-image {
+  max-width: 360px;
 }
