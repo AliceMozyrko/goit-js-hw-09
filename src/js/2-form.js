@@ -38,12 +38,33 @@ function onFormSubmit(event) {
 }
 
 function onFormInput(event) {
-  formData[event.target.name] = event.target.value.trim();
+  const { name, value } = event.target;
+  formData[name] = value.trim();
   localStorage.setItem(FEEDBACK_KEY, JSON.stringify(formData));
 }
 
 form.addEventListener("submit", onFormSubmit);
 form.addEventListener("input", onFormInput);
+
+window.addEventListener("load", () => {
+  const savedFormData = JSON.parse(localStorage.getItem(FEEDBACK_KEY)) || {};
+  formData.email = savedFormData.email || "";
+  formData.message = savedFormData.message || "";
+  const emailInput = form.querySelector('input[type="email"]');
+  const messageInput = form.querySelector("textarea");
+  emailInput.value = formData.email;
+  messageInput.value = formData.message;
+});
+
+
+function onFormInput(event) {
+  const { name, value } = event.target;
+  formData[name] = value.trim();
+}
+
+form.addEventListener("submit", onFormSubmit);
+form.addEventListener("input", onFormInput);
+
 
 window.addEventListener("load", () => {
   const savedFormData = JSON.parse(localStorage.getItem(FEEDBACK_KEY)) || {};
