@@ -18,44 +18,37 @@
 const formData = {
   email: "",
   message: ""
-}
+};
 
-const FEEDBACK_KEY = "feedback-form-state"
+const FEEDBACK_KEY = "feedback-form-state";
 
-const formRefs = {
-  form: document.querySelector(".feedback-form"),
-  input: document.querySelector('input[type="email"]'),
-  message: document.querySelector("textarea")
-}
+const form = document.querySelector(".feedback-form");
 
 function onFormSubmit(event) {
-  event.preventDefault()
-  if (formData.email.trim() === "" || formData.message.trim() === "") {
+  event.preventDefault();
+  const trimEmail = formData.email.trim();
+  const trimMsg = formData.message.trim();
+  if (trimEmail === "" || trimMsg === "") {
     alert("Fill please all fields");
     return;
   }
-  console.log(formData);
-  localStorage.removeItem(FEEDBACK_KEY)
-  event.currentTarget.reset()
+  console.log({ email: trimEmail, message: trimMsg });
+  localStorage.removeItem(FEEDBACK_KEY);
+  form.reset();
 }
 
 function onFormInput(event) {
-  event.preventDefault()
-  formData[event.target.name] = event.target.value
+  formData[event.target.name] = event.target.value.trim();
   localStorage.setItem(FEEDBACK_KEY, JSON.stringify(formData));
 }
 
-formRefs.form.addEventListener("submit", onFormSubmit)
-formRefs.form.addEventListener("input", onFormInput)
+form.addEventListener("submit", onFormSubmit);
+form.addEventListener("input", onFormInput);
 
-
-function onTextarea(event) {
-  localStorage.setItem(FEEDBACK_KEY, event.target.value)
-}
-formRefs.message.addEventListener("input", onTextarea)
-
-function populateTxtarea() {
-  const msgText = localStorage.getItem(FEEDBACK_KEY)
-  if (!msgText) return
-  formRefs.message.value = msgText
-}
+window.addEventListener("load", () => {
+  const savedFormData = JSON.parse(localStorage.getItem(FEEDBACK_KEY)) || {};
+  const emailInput = form.querySelector('input[type="email"]');
+  const messageInput = form.querySelector("textarea");
+  emailInput.value = savedFormData.email || "";
+  messageInput.value = savedFormData.message || "";
+});
