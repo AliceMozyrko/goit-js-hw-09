@@ -47,8 +47,10 @@ form.addEventListener("input", onFormInput);
 
 window.addEventListener("load", () => {
   const savedFormData = JSON.parse(localStorage.getItem(FEEDBACK_KEY)) || {};
+  formData.email = savedFormData.email || formData.email;
+  formData.message = savedFormData.message || formData.message;
   const emailInput = form.querySelector('input[type="email"]');
   const messageInput = form.querySelector("textarea");
-  emailInput.value = savedFormData.email || "";
-  messageInput.value = savedFormData.message || "";
+  emailInput.value = formData.email;
+  messageInput.value = formData.message;
 });
