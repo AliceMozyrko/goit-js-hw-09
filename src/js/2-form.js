@@ -23,37 +23,30 @@ const formData = {
 const FEEDBACK_KEY = "feedback-form-state";
 
 const form = document.querySelector(".feedback-form");
+const email = form.elements.email
+const txtAreaMsg = form.elements.message
 
-function onFormSubmit(event) {
-  event.preventDefault();
-  const trimEmail = formData.email.trim();
-  const trimMsg = formData.message.trim();
-  if (trimEmail === "" || trimMsg === "") {
-    alert("Fill please all fields");
-    return;
+form.addEventListener("input", (event) => {
+  formData.email = email.value.trim()
+  formData.message = txtAreaMsg.value.trim()
+  localStorage.setItem(FEEDBACK_KEY, JSON.stringify(formData))
+})
+
+if (localStorage.getItem(FEEDBACK_KEY)) {
+  const newFormData = JSON.parse(localStorage.getItem(FEEDBACK_KEY))
+  email.value = formData.email = newFormData.email
+  txtAreaMsg.value = formData.message = newFormData.message
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault()
+  if (!email.value || !txtAreaMsg.value) {
+    alert("Fill please all fields")
+  } else {
+    console.log(formData)
+    console.log(email.value)
+    console.log(txtAreaMsg.value)
+    localStorage.removeItem(FEEDBACK_KEY)
+    form.reset()
   }
-  console.log({ email: trimEmail, message: trimMsg });
-  localStorage.setItem(FEEDBACK_KEY, JSON.stringify(formData)); // Оновлення localStorage після відправки форми
-  form.reset();
-}
-
-function onFormInput(event) {
-  const { name, value } = event.target;
-  formData[name] = value.trim();
-}
-
-form.querySelectorAll('input, textarea').forEach(input => {
-  input.addEventListener('input', onFormInput);
-});
-
-form.addEventListener("submit", onFormSubmit);
-
-window.addEventListener("load", () => {
-  const savedFormData = JSON.parse(localStorage.getItem(FEEDBACK_KEY)) || {};
-  formData.email = savedFormData.email || "";
-  formData.message = savedFormData.message || "";
-  const emailInput = form.querySelector('input[type="email"]');
-  const messageInput = form.querySelector("textarea");
-  emailInput.value = formData.email;
-  messageInput.value = formData.message;
-});
+})
